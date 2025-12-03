@@ -1,0 +1,11 @@
+# STM32CubeIDE specific
+/Debug/
+/Release/
+.settings/
+.mxproject
+*.launch
+*.ioc.bak
+
+# Windows specific
+Thumbs.db
+Desktop.ini
