@@ -6,23 +6,27 @@
  */
 #include "input_reading.h"
 
+// Buffer saves the final result after debounce
 static GPIO_PinState buttonBuffer[NO_OF_BUTTONS];
 
+// Two buffers for debounce
 static GPIO_PinState debounceButtonBuffer1[NO_OF_BUTTONS] =
     {BUTTON_IS_RELEASED, BUTTON_IS_RELEASED};
 static GPIO_PinState debounceButtonBuffer2[NO_OF_BUTTONS] =
     {BUTTON_IS_RELEASED, BUTTON_IS_RELEASED};
 
+// Pin Button
 uint16_t arrayPIN[NO_OF_BUTTONS] = {
     Button1_Pin,
     Button2_Pin
 };
 
-#define INITIAL_HOLD_DELAY      100
-#define SUBSEQUENT_HOLD_DELAY   10
+#define INITIAL_HOLD_DELAY      100 // Wait for 1s (100 * 10ms)
+#define SUBSEQUENT_HOLD_DELAY   10  // Increases by 1 unit every 100ms (10 * 10ms)
 
+//Flag for single click event
 static uint8_t flagForButtonPressed[NO_OF_BUTTONS];
-
+// Timer variable
 static int button_hold_counter[NO_OF_BUTTONS];
 
 void button_reading(void) {

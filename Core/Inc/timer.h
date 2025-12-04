@@ -10,6 +10,10 @@
 
 #include "main.h"
 
+extern int flagMode_RED_BLINK;
+extern int flagMode_GREEN_BLINK;
+extern int flagMode_YELLOW_BLINK;
+
 void runTimer_LED(void);
 int getCycle_time_ms(void);
 void button_reading(void);
