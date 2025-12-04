@@ -15,6 +15,7 @@ extern int flagRed[2];
 extern int flagGreen[2];
 extern int flagYellow[2];
 
+// Flag for modifying MODE (blink led)
 extern int flagMode_RED_BLINK;
 extern int flagMode_GREEN_BLINK;
 extern int flagMode_YELLOW_BLINK;

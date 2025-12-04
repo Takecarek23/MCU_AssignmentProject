@@ -9,7 +9,7 @@
 #include "output_display.h"
 #include "traffic_logic.h"
 
-int flagInterruptLED_and_SEG = 1;
+int flagInterruptLED_and_SEG = 1; // Flag for AUTO MODE
 int flagRed[2]    = {0, 0};
 int flagGreen[2]  = {0, 0};
 int flagYellow[2] = {0, 0};
@@ -17,6 +17,7 @@ int flagYellow[2] = {0, 0};
 static int MAX_COUNTER = 0;
 static int counter_mode_2_3_4 = 0;
 
+// Flag define
 int flagMode_RED_BLINK = 0;
 int flagMode_GREEN_BLINK = 0;
 int flagMode_YELLOW_BLINK = 0;
@@ -29,21 +30,28 @@ enum LightState {
     STATE_YELLOW
 };
 
+// Init: Red - Green
 static enum LightState lightState1 = STATE_RED;
 static enum LightState lightState2 = STATE_GREEN;
 
+// Convert ms into tick for timer
 static int timerCounter1;
 static int timerCounter2;
 
+// --========== RESTART ===========--
 void restartAllFromScratch(void) {
     lightState1 = STATE_RED;
     lightState2 = STATE_GREEN;
 
+    // Get new tick
     timerCounter1 = getDurationTime_RED_ms() / TIMER_CYCLE_MS;
     timerCounter2 = getDurationTime_GREEN_ms() / TIMER_CYCLE_MS;
 }
 
 void runTimer_LED(void) {
+
+    // --- Traffic Light 1 ---
+	//LCD_Show_Data(0, timerCounter1/100, timerCounter1/100);
     if (timerCounter1 > 0) {
         timerCounter1--;
     }
@@ -65,6 +73,7 @@ void runTimer_LED(void) {
         }
     }
 
+    // --- Traffic Light 2 ---
     if (timerCounter2 > 0) {
         timerCounter2--;
     }
@@ -86,18 +95,20 @@ void runTimer_LED(void) {
         }
     }
 
+    // 1. Display Traffic Light 1 (Index 0)
 	switch (lightState1) {
 		case STATE_RED:
-			displayLED_RED(1, 0);
+			displayLED_RED(1, 0);    // Only Red
 			break;
 		case STATE_GREEN:
-			displayLED_GREEN(1, 0);
+			displayLED_GREEN(1, 0);  // Only Green
 			break;
 		case STATE_YELLOW:
-			displayLED_YELLOW(1, 0);
+			displayLED_YELLOW(1, 0); // Only Amber
 			break;
 	}
 
+	// 1. Display Traffic Light 2 (Index 0)
 	switch (lightState2) {
 		case STATE_RED:
 			displayLED_RED(1, 1);
@@ -111,6 +122,7 @@ void runTimer_LED(void) {
 	}
 }
 int getCycle_time_ms(void){
+    // TODO: Return Timer Interrupt
     return 10;
 }
 
@@ -128,6 +140,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 				counter_mode_2_3_4 = MAX_COUNTER;
 			}
 
+			// RED BLINK MODE
 			if (flagMode_RED_BLINK == 1) {
 				if (counter_mode_2_3_4 <= 0) {
 					counter_mode_2_3_4 = MAX_COUNTER;
@@ -143,6 +156,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 				}
 			}
 
+			// GREEN BLINK MODE
 			if (flagMode_GREEN_BLINK == 1) {
 				if (counter_mode_2_3_4 <= 0) {
 					counter_mode_2_3_4 = MAX_COUNTER;
@@ -158,6 +172,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 				}
 			}
 
+			// AMBER BLINK MODE
 			if (flagMode_YELLOW_BLINK == 1) {
 				if (counter_mode_2_3_4 <= 0) {
 					counter_mode_2_3_4 = MAX_COUNTER;
@@ -183,4 +198,3 @@ int getTimer1Value(void) {
 int getTimer2Value(void) {
     return timerCounter2;
 }
-

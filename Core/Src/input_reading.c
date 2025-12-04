@@ -6,10 +6,10 @@
  */
 #include "input_reading.h"
 
-// Buffer saves the final result after debounce
+// Buffer saves the final result after DEBOUNCE
 static GPIO_PinState buttonBuffer[NO_OF_BUTTONS];
 
-// Two buffers for debounce
+// Two buffers for DEBOUNCE
 static GPIO_PinState debounceButtonBuffer1[NO_OF_BUTTONS] =
     {BUTTON_IS_RELEASED, BUTTON_IS_RELEASED};
 static GPIO_PinState debounceButtonBuffer2[NO_OF_BUTTONS] =
