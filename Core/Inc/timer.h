@@ -10,6 +10,11 @@
 
 #include "main.h"
 
+extern int flagInterruptLED_and_SEG;
+extern int flagRed[2];
+extern int flagGreen[2];
+extern int flagYellow[2];
+
 extern int flagMode_RED_BLINK;
 extern int flagMode_GREEN_BLINK;
 extern int flagMode_YELLOW_BLINK;
