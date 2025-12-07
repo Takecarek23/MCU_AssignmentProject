@@ -68,11 +68,18 @@ void fsm_for_input_processing(void) {
         case MODE_3_RED_MODIFY:
         	LCD_Show_Mode(2);
 
+        	flagInterruptLED_and_SEG = 0; // To turn off the normal state
+    		flagMode_RED_BLINK = 1; // Blink the led red with 2Hz
+
+    		displayLED_RED(flagRed[0], 0); // flashing red light at 2Hz frequency
+			displayLED_RED(flagRed[1], 1); // flashing red light at 2Hz frequency
+
 			LCD_Show_Data(2, temp_duration_ms / 1000, temp_duration_ms / 1000);
 
             // Switch to MODE 3 if "is_mode_button_pressed"
             if (is_mode_button_pressed) {
                 currentMode = MODE_4_YELLOW_MODIFY;
+                flagMode_RED_BLINK = 0;
                 temp_duration_ms = getDurationTime_YELLOW_ms();
             }
 
@@ -81,6 +88,10 @@ void fsm_for_input_processing(void) {
 				temp_duration_ms += 1000;
 				if (temp_duration_ms > 99000) temp_duration_ms = 1000;
 				setDurationTime_RED_ms(getDurationTime_GREEN_ms() + getDurationTime_YELLOW_ms());
+				// Nói chung là đèn đỏ để chưng thôi, chừng nào đổi 2 đèn kia mới đổi được đèn đỏ
+				// Nếu muốn đỏ lên, xanh cũng lên thì bị trường hợp nếu đỏ giảm thì sao
+//				setDurationTime_RED_ms(temp_duration_ms);
+//				setDurationTime_GREEN_ms(getDurationTime_RED_ms() - getDurationTime_YELLOW_ms());
 			}
             break;
 
@@ -88,11 +99,20 @@ void fsm_for_input_processing(void) {
         	// Hiển thị mode 3 trên dòng đầu tiên lcd
         	LCD_Show_Mode(3);
 
+        	flagInterruptLED_and_SEG = 0; // Tắt cờ của chế độ auto
+            flagMode_YELLOW_BLINK = 1; // Nhấp nháy led vàng
+
+            // Nhấp nháy 2 bên luôn
+            displayLED_YELLOW(flagYellow[0], 0);
+            displayLED_YELLOW(flagYellow[1], 1);
+
             // Hiển thị dòng 2, 2 số thời gian gian giống nhau
             LCD_Show_Data(3, temp_duration_ms / 1000, temp_duration_ms / 1000);
 
             // Nếu nút 1 được nhấn
             if (is_mode_button_pressed) {
+
+            	flagMode_YELLOW_BLINK = 0; // Tắt đèn vàng đang nháy
                 currentMode = MODE_5_GREEN_MODIFY; // Chuyển sang chế độ điều chỉnh đèn xanh
                 temp_duration_ms = getDurationTime_GREEN_ms(); // Lấy thời gian hiện tại của đèn xanh
             }
@@ -109,9 +129,16 @@ void fsm_for_input_processing(void) {
         case MODE_5_GREEN_MODIFY:
         	LCD_Show_Mode(4);
 
+        	flagInterruptLED_and_SEG = 0;
+            flagMode_GREEN_BLINK = 1;
+
+            displayLED_GREEN(flagGreen[0], 0);
+            displayLED_GREEN(flagGreen[1], 1);
+
             LCD_Show_Data(3, temp_duration_ms / 1000, temp_duration_ms / 1000);
 
             if (is_mode_button_pressed) {
+            	flagMode_YELLOW_BLINK = 0;
                 currentMode = MODE_1_NORMAL;
                 restartAllFromScratch();
                 temp_duration_ms = getDurationTime_GREEN_ms();
