@@ -59,6 +59,44 @@ void fsm_for_input_processing(void) {
             break;
         case MODE_2_MANUAL:
 			LCD_Show_Mode(1); // Luôn hiển thị tiêu đề hàng 1
+			flagInterruptLED_and_SEG = 0;
+
+			// --- 1. XỬ LÝ NÚT NHẤN (CHỈ XỬ LÝ LOGIC ĐÈN) ---
+			if (is_increment_event) {
+				// SỬA LỖI LOGIC: Có 4 pha đèn nên phải chia dư cho 4 (0,1,2,3)
+				manualPhase = (manualPhase + 1) % 4;
+			}
+
+			// --- 2. ĐIỀU KHIỂN ĐÈN (LUÔN CHẠY) ---
+			// Đưa ra ngoài IF để đèn luôn sáng đúng pha kể cả khi chưa nhấn nút
+			switch (manualPhase) {
+				case 0:
+					displayLED_RED(1, 0);    // Trụ 1 Đỏ
+					displayLED_GREEN(1, 1);  // Trụ 2 Xanh
+					break;
+				case 1:
+					displayLED_RED(1, 0);    // Trụ 1 Đỏ
+					displayLED_YELLOW(1, 1); // Trụ 2 Vàng
+					break;
+				case 2:
+					displayLED_GREEN(1, 0);  // Trụ 1 Xanh
+					displayLED_RED(1, 1);    // Trụ 2 Đỏ
+					break;
+				case 3:
+					displayLED_YELLOW(1, 0); // Trụ 1 Vàng
+					displayLED_RED(1, 1);    // Trụ 2 Đỏ
+					break;
+			}
+
+			// --- 3. HIỂN THỊ LCD (LUÔN CHẠY) ---
+			// Đưa ra ngoài IF để màn hình cập nhật ngay khi vào chế độ
+			lcd_goto_XY(2, 0);
+			switch (manualPhase) {
+				case 0: lcd_send_string("MAN: RED-GREEN "); break;
+				case 1: lcd_send_string("MAN: RED-YELLOW"); break;
+				case 2: lcd_send_string("MAN: GREEN-RED "); break;
+				case 3: lcd_send_string("MAN: YELLO-RED "); break;
+			}
 
 			// --- 4. CHUYỂN MODE ---
 			if (is_mode_button_pressed) {
