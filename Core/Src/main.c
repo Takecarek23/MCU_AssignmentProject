@@ -99,18 +99,30 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE BEGIN 2 */
+// Khởi tạo LCD
+
+  lcd_init();
+
+  // Hiển thị màn hình chào
+  lcd_goto_XY(1, 3); // Căn giữa dòng 1 (Hàng 1, Cột 3)
+  lcd_send_string("TRAFFIC");
+  lcd_goto_XY(2, 4); // Căn giữa dòng 2 (Hàng 2, Cột 4)
+  lcd_send_string("PROJECT");
+  HAL_Delay(2000);
+
+  lcd_clear_display(); // Xóa màn hình để bắt đầu chương trình chính
 
   /* USER CODE END 2 */
-
+  restartAllFromScratch();
   /* Infinite loop */
+  while (1) {
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	  fsm_for_input_processing();
     /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
+    /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 

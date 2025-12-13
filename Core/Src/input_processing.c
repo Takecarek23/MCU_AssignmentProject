@@ -63,7 +63,7 @@ void fsm_for_input_processing(void) {
 
 			// --- 1. XỬ LÝ NÚT NHẤN (CHỈ XỬ LÝ LOGIC ĐÈN) ---
 			if (is_increment_event) {
-				// SỬA LỖI LOGIC: Có 4 pha đèn nên phải chia dư cho 4 (0,1,2,3)
+				// Có 4 pha đèn nên phải chia dư cho 4 (0,1,2,3)
 				manualPhase = (manualPhase + 1) % 4;
 			}
 
@@ -88,7 +88,7 @@ void fsm_for_input_processing(void) {
 					break;
 			}
 
-			// --- 3. HIỂN THỊ LCD (LUÔN CHẠY) ---
+			// --- 3. HIỂN THỊ LCD ---
 			// Đưa ra ngoài IF để màn hình cập nhật ngay khi vào chế độ
 			lcd_goto_XY(2, 0);
 			switch (manualPhase) {
@@ -126,10 +126,7 @@ void fsm_for_input_processing(void) {
 				temp_duration_ms += 1000;
 				if (temp_duration_ms > 99000) temp_duration_ms = 1000;
 				setDurationTime_RED_ms(getDurationTime_GREEN_ms() + getDurationTime_YELLOW_ms());
-				// Nói chung là đèn đỏ để chưng thôi, chừng nào đổi 2 đèn kia mới đổi được đèn đỏ
-				// Nếu muốn đỏ lên, xanh cũng lên thì bị trường hợp nếu đỏ giảm thì sao
-//				setDurationTime_RED_ms(temp_duration_ms);
-//				setDurationTime_GREEN_ms(getDurationTime_RED_ms() - getDurationTime_YELLOW_ms());
+				// Chỉ khi đổi thời gian đèn xanh, vàng thì đèn đỏ mới đổi
 			}
             break;
 
