@@ -83,6 +83,24 @@ void LCD_Show_Mode(int status) {
     lcd_goto_XY(1, 0);
 
     switch (status) {
+        case MODE_AUTO:
+            lcd_send_string("MODE: AUTO      ");
+            break;
+        case MODE_MANUAL:
+            lcd_send_string("MODE: MANUAL    ");
+            break;
+        case MODE_TUNING_RED:
+            lcd_send_string("TUNE: RED LED   ");
+            break;
+        case MODE_TUNING_YELLOW:
+            lcd_send_string("TUNE: YELLOW LED");
+            break;
+        case MODE_TUNING_GREEN:
+            lcd_send_string("TUNE: GREEN LED ");
+            break;
+        default:
+            lcd_send_string("ERROR           ");
+            break;
     }
 }
 
@@ -94,5 +112,40 @@ void LCD_Show_Data(int status, int val1, int val2) {
     lcd_goto_XY(2, 0);
 
     switch (status) {
-    }
+            case MODE_AUTO:
+                // Hiển thị 2 đồng hồ đếm ngược. Ví dụ: "T1:15s   T2:20s "
+                // %02d nghĩa là số có 2 chữ số (vd: 05, 09)
+                sprintf(buffer, "T1:%02d, T2:%02d", val1, val2);
+                lcd_send_string(buffer);
+                HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+                break;
+
+            case MODE_MANUAL:
+            	switch (manualPhase) {
+            		case 0: lcd_send_string("MAN: RED - GREEN"); break;
+            		case 1: lcd_send_string("MAN: RED - AMBER"); break;
+            		case 2: lcd_send_string("MAN: GREEN - RED"); break;
+            		case 3: lcd_send_string("MAN: AMBER - RED"); break;
+            	}
+                break;
+            case MODE_TUNING_RED:
+                // Hiển thị giá trị đang chỉnh. Ví dụ: "Duration: 15s   "
+                sprintf(buffer, "Duration: %02d s ", val1);
+                lcd_send_string(buffer);
+                HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+                break;
+            case MODE_TUNING_YELLOW:
+                sprintf(buffer, "Duration: %02d s ", val1);
+                lcd_send_string(buffer);
+                break;
+            case MODE_TUNING_GREEN:
+                sprintf(buffer, "Duration: %02d s ", val1);
+                lcd_send_string(buffer);
+                break;
+            default:
+            	break;
+        }
 }
+
+
+
