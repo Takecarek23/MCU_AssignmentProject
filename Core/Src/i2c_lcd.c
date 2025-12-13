@@ -109,6 +109,7 @@ void LCD_Show_Mode(int status) {
 // val1: Thời gian đèn 1 (Hoặc giá trị đang chỉnh sửa)
 // val2: Thời gian đèn 2 (Chỉ dùng trong Auto)
 void LCD_Show_Data(int status, int val1, int val2) {
+	char buffer[16];
     lcd_goto_XY(2, 0);
 
     switch (status) {
@@ -117,22 +118,14 @@ void LCD_Show_Data(int status, int val1, int val2) {
                 // %02d nghĩa là số có 2 chữ số (vd: 05, 09)
                 sprintf(buffer, "T1:%02d, T2:%02d", val1, val2);
                 lcd_send_string(buffer);
-                HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
                 break;
 
             case MODE_MANUAL:
-            	switch (manualPhase) {
-            		case 0: lcd_send_string("MAN: RED - GREEN"); break;
-            		case 1: lcd_send_string("MAN: RED - AMBER"); break;
-            		case 2: lcd_send_string("MAN: GREEN - RED"); break;
-            		case 3: lcd_send_string("MAN: AMBER - RED"); break;
-            	}
-                break;
+            	// Đã hiện thực bên fsm
             case MODE_TUNING_RED:
                 // Hiển thị giá trị đang chỉnh. Ví dụ: "Duration: 15s   "
                 sprintf(buffer, "Duration: %02d s ", val1);
                 lcd_send_string(buffer);
-                HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
                 break;
             case MODE_TUNING_YELLOW:
                 sprintf(buffer, "Duration: %02d s ", val1);

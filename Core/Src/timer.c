@@ -15,7 +15,7 @@ int flagGreen[2]  = {0, 0};
 int flagYellow[2] = {0, 0};
 
 static int MAX_COUNTER = 0;
-static int counter_mode_2_3_4 = 0;
+static int counter_mode_3_4_5 = 0;
 
 // Flag define
 int flagMode_RED_BLINK = 0;
@@ -137,54 +137,54 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 			if (MAX_COUNTER <= 0) {
 				MAX_COUNTER = 500 / getCycle_time_ms();
-				counter_mode_2_3_4 = MAX_COUNTER;
+				counter_mode_3_4_5 = MAX_COUNTER;
 			}
 
 			// RED BLINK MODE
 			if (flagMode_RED_BLINK == 1) {
-				if (counter_mode_2_3_4 <= 0) {
-					counter_mode_2_3_4 = MAX_COUNTER;
+				if (counter_mode_3_4_5 <= 0) {
+					counter_mode_3_4_5 = MAX_COUNTER;
 				} else {
-					if (counter_mode_2_3_4 == MAX_COUNTER / 2) {
+					if (counter_mode_3_4_5 == MAX_COUNTER / 2) {
 						flagRed[0] = 0;
 						flagRed[1] = 0;
-					} else if (counter_mode_2_3_4 == MAX_COUNTER) {
+					} else if (counter_mode_3_4_5 == MAX_COUNTER) {
 						flagRed[0] = 1;
 						flagRed[1] = 1;
 					}
-					--counter_mode_2_3_4;
+					--counter_mode_3_4_5;
 				}
 			}
 
 			// GREEN BLINK MODE
 			if (flagMode_GREEN_BLINK == 1) {
-				if (counter_mode_2_3_4 <= 0) {
-					counter_mode_2_3_4 = MAX_COUNTER;
+				if (counter_mode_3_4_5 <= 0) {
+					counter_mode_3_4_5 = MAX_COUNTER;
 				} else {
-					if (counter_mode_2_3_4 == MAX_COUNTER / 2) {
+					if (counter_mode_3_4_5 == MAX_COUNTER / 2) {
 						flagGreen[0] = 0;
 						flagGreen[1] = 0;
-					} else if (counter_mode_2_3_4 == MAX_COUNTER) {
+					} else if (counter_mode_3_4_5 == MAX_COUNTER) {
 						flagGreen[0] = 1;
 						flagGreen[1] = 1;
 					}
-					--counter_mode_2_3_4;
+					--counter_mode_3_4_5;
 				}
 			}
 
-			// AMBER BLINK MODE
+			// YELLOW BLINK MODE
 			if (flagMode_YELLOW_BLINK == 1) {
-				if (counter_mode_2_3_4 <= 0) {
-					counter_mode_2_3_4 = MAX_COUNTER;
+				if (counter_mode_3_4_5 <= 0) {
+					counter_mode_3_4_5 = MAX_COUNTER;
 				} else {
-					if (counter_mode_2_3_4 == MAX_COUNTER / 2) {
+					if (counter_mode_3_4_5 == MAX_COUNTER / 2) {
 						flagYellow[0] = 0;
 						flagYellow[1] = 0;
-					} else if (counter_mode_2_3_4 == MAX_COUNTER) {
+					} else if (counter_mode_3_4_5 == MAX_COUNTER) {
 						flagYellow[0] = 1;
 						flagYellow[1] = 1;
 					}
-					--counter_mode_2_3_4;
+					--counter_mode_3_4_5;
 				}
 			}
 		}
